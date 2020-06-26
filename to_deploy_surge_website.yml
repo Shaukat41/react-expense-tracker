@@ -1,0 +1,30 @@
+
+
+name: Deploy Surge Website in CI mode
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# One or more jobs can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Deploying to surge
+    steps:
+    # Check-out repository under $GITHUB_WORKSPACE, so this job can access it
+    - uses: actions/checkout@v2
+    - name: Install Node.js
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: 12
+    - name: install Surge
+      run: npm install --global surge
+      
+    - name: Run Surge
+      run: surge ./build expentrac-shaukat41.surge.sh --token $ {{ secrets.REACT_EXPENSE_TOKEN }}
+        
